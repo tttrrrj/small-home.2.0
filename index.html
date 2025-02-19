@@ -9,6 +9,12 @@
             margin: 0;
             overflow: hidden;
             background-color: #f0f0f0;
+            font-family: Arial, sans-serif;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            flex-direction: column;
         }
         .shape {
             position: absolute;
@@ -23,15 +29,32 @@
         .square {
             background-color: #e74c3c;
         }
+        #title {
+            font-size: 24px;
+            margin-top: 20px;
+            color: #333;
+            font-weight: bold;
+        }
+        #task {
+            font-size: 18px;
+            color: #555;
+        }
     </style>
 </head>
 <body>
     <div class="shape square" id="square"></div>
     <div class="shape circle" id="circle"></div>
+    <div id="task">点击任务: <span id="task-name">点击圆形10次</span></div>
+    <div id="title"></div>
 
     <script>
         const square = document.getElementById('square');
         const circle = document.getElementById('circle');
+        const taskName = document.getElementById('task-name');
+        const title = document.getElementById('title');
+        let circleClicks = 0;
+        let squareClicks = 0;
+        let taskCompleted = false;
 
         // 随机位置函数
         function getRandomPosition() {
@@ -52,13 +75,58 @@
             circle.style.top = `${circlePos.y}px`;
         }
 
-        // 点击事件，方块和圆会随机移动
-        document.body.addEventListener('click', () => {
-            setRandomPositions();
+        // 更新任务和头衔
+        function updateTask() {
+            if (circleClicks >= 10 && squareClicks < 10) {
+                taskName.textContent = '点击方块10次';
+                title.textContent = '圆形征服者（Circle Conqueror）';
+            } else if (squareClicks >= 10 && circleClicks < 10) {
+                taskName.textContent = '点击圆形10次';
+                title.textContent = '方块霸主（Block Overlord）';
+            } else if (circleClicks >= 9 && squareClicks >= 1) {
+                taskName.textContent = '点击方块一次';
+                title.textContent = '圆块双重手（Dual Clicker）';
+            } else if (squareClicks >= 9 && circleClicks >= 1) {
+                taskName.textContent = '点击圆形一次';
+                title.textContent = '方圆混搭者（Block-Circle Fusionist）';
+            } else if (circleClicks >= 5) {
+                taskName.textContent = '触发反弹';
+                title.textContent = '反弹大师（Bounce Master）';
+            } else if (squareClicks >= 5) {
+                taskName.textContent = '触发反弹';
+                title.textContent = '方块反击者（Block Bouncer）';
+            } else if (circleClicks >= 5 && squareClicks >= 5) {
+                taskName.textContent = '完美协调';
+                title.textContent = '连环挑战者（Combo Challenger）';
+            }
+        }
+
+        // 点击事件，方块和圆会更新点击次数
+        square.addEventListener('click', () => {
+            if (taskCompleted) return;
+            squareClicks++;
+            updateTask();
+            checkTaskCompletion();
         });
+
+        circle.addEventListener('click', () => {
+            if (taskCompleted) return;
+            circleClicks++;
+            updateTask();
+            checkTaskCompletion();
+        });
+
+        // 检查任务是否完成
+        function checkTaskCompletion() {
+            if (circleClicks >= 10 && squareClicks >= 10) {
+                taskCompleted = true;
+                title.textContent = '任务完成！';
+            }
+        }
 
         // 初始位置
         setRandomPositions();
     </script>
 </body>
 </html>
+
