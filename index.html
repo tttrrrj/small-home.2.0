@@ -22,14 +22,14 @@
             position: absolute;
             width: 50px;
             height: 50px;
-            transition: transform 0.3s ease-in-out;
+            transition: transform 0.5s ease-in-out; /* 动画移动速度改为 0.5秒 */
+            cursor: pointer;
         }
         .circle {
-            background-color: #3498db;
             border-radius: 50%;
         }
         .square {
-            background-color: #e74c3c;
+            /* 方块默认颜色，不再定义 */
         }
         #title {
             font-size: 24px;
@@ -41,22 +41,52 @@
             font-size: 18px;
             color: #555;
         }
+        .shape:hover {
+            transform: scale(1.2) rotate(15deg);
+            transition: transform 0.3s ease;
+        }
     </style>
 </head>
 <body>
     <div id="title"></div>
     <div id="task">点击任务: <span id="task-name">点击圆形10次</span></div>
-    <div class="shape square" id="square"></div>
-    <div class="shape circle" id="circle"></div>
+
+    <!-- 多个圆形和方块 -->
+    <div class="shape square" id="square1"></div>
+    <div class="shape square" id="square2"></div>
+    <div class="shape square" id="square3"></div>
+    <div class="shape square" id="square4"></div>
+    <div class="shape circle" id="circle1"></div>
+    <div class="shape circle" id="circle2"></div>
+    <div class="shape circle" id="circle3"></div>
+    <div class="shape circle" id="circle4"></div>
 
     <script>
-        const square = document.getElementById('square');
-        const circle = document.getElementById('circle');
+        const squares = [
+            document.getElementById('square1'),
+            document.getElementById('square2'),
+            document.getElementById('square3'),
+            document.getElementById('square4')
+        ];
+        const circles = [
+            document.getElementById('circle1'),
+            document.getElementById('circle2'),
+            document.getElementById('circle3'),
+            document.getElementById('circle4')
+        ];
         const taskName = document.getElementById('task-name');
         const title = document.getElementById('title');
         let circleClicks = 0;
         let squareClicks = 0;
         let taskCompleted = false;
+
+        // 随机颜色函数（RGB）
+        function getRandomColor() {
+            const r = Math.floor(Math.random() * 256);
+            const g = Math.floor(Math.random() * 256);
+            const b = Math.floor(Math.random() * 256);
+            return `rgb(${r}, ${g}, ${b})`;
+        }
 
         // 随机位置函数
         function getRandomPosition() {
@@ -65,72 +95,138 @@
             return { x, y };
         }
 
-        // 设置方块和圆的位置
-        function setRandomPositions() {
-            const squarePos = getRandomPosition();
-            const circlePos = getRandomPosition();
+        // 设置方块和圆的位置和颜色
+        function setRandomPositionsAndColors() {
+            squares.forEach(square => {
+                square.style.left = `${getRandomPosition().x}px`;
+                square.style.top = `${getRandomPosition().y}px`;
+                square.style.backgroundColor = getRandomColor(); // 随机颜色
+            });
 
-            square.style.left = `${squarePos.x}px`;
-            square.style.top = `${squarePos.y}px`;
-
-            circle.style.left = `${circlePos.x}px`;
-            circle.style.top = `${circlePos.y}px`;
+            circles.forEach(circle => {
+                circle.style.left = `${getRandomPosition().x}px`;
+                circle.style.top = `${getRandomPosition().y}px`;
+                circle.style.backgroundColor = getRandomColor(); // 随机颜色
+            });
         }
 
-        // 更新任务和头衔
+        // 任务头衔（增加了更多可能的完成条件）
+        const taskTitles = {
+            "circle10": "圆形征服者（Circle Conqueror）",
+            "block10": "方块霸主（Block Overlord）",
+            "circle9_block1": "圆块双重手（Dual Clicker）",
+            "block9_circle1": "方圆混搭者（Block-Circle Fusionist）",
+            "circle5_bounce": "反弹大师（Bounce Master）",
+            "block5_bounce": "方块反击者（Block Bouncer）",
+            "circle5_block5": "连环挑战者（Combo Challenger）",
+            "circle_block_alternating10": "完美协调者（Perfect Synchronizer）",
+            "circle_block10": "极限战士（Extreme Warrior）",
+            "circle5_block5_circle1": "圆块再圆（Circle-Block Reborn）",
+            "block10_circleBounce": "反弹征服者（Bounce Conqueror）",
+            "circle_block30": "节奏大师（Rhythm Master）"
+        };
+
+        // 更新任务
         function updateTask() {
             if (circleClicks >= 10 && squareClicks < 10) {
                 taskName.textContent = '点击方块10次';
-                title.textContent = '圆形征服者（Circle Conqueror）';
+                title.textContent = taskTitles.circle10;
             } else if (squareClicks >= 10 && circleClicks < 10) {
                 taskName.textContent = '点击圆形10次';
-                title.textContent = '方块霸主（Block Overlord）';
+                title.textContent = taskTitles.block10;
             } else if (circleClicks >= 9 && squareClicks >= 1) {
                 taskName.textContent = '点击方块一次';
-                title.textContent = '圆块双重手（Dual Clicker）';
+                title.textContent = taskTitles.circle9_block1;
             } else if (squareClicks >= 9 && circleClicks >= 1) {
                 taskName.textContent = '点击圆形一次';
-                title.textContent = '方圆混搭者（Block-Circle Fusionist）';
+                title.textContent = taskTitles.block9_circle1;
             } else if (circleClicks >= 5) {
                 taskName.textContent = '触发反弹';
-                title.textContent = '反弹大师（Bounce Master）';
+                title.textContent = taskTitles.circle5_bounce;
             } else if (squareClicks >= 5) {
                 taskName.textContent = '触发反弹';
-                title.textContent = '方块反击者（Block Bouncer）';
+                title.textContent = taskTitles.block5_bounce;
             } else if (circleClicks >= 5 && squareClicks >= 5) {
                 taskName.textContent = '完美协调';
-                title.textContent = '连环挑战者（Combo Challenger）';
+                title.textContent = taskTitles.circle5_block5;
             }
         }
 
         // 点击事件，方块和圆会更新点击次数
-        square.addEventListener('click', () => {
-            if (taskCompleted) return;
-            squareClicks++;
-            updateTask();
-            checkTaskCompletion();
+        squares.forEach(square => {
+            square.addEventListener('click', () => {
+                if (taskCompleted) return;
+                squareClicks++;
+                updateTask();
+                checkTaskCompletion();
+            });
         });
 
-        circle.addEventListener('click', () => {
-            if (taskCompleted) return;
-            circleClicks++;
-            updateTask();
-            checkTaskCompletion();
+        circles.forEach(circle => {
+            circle.addEventListener('click', () => {
+                if (taskCompleted) return;
+                circleClicks++;
+                updateTask();
+                checkTaskCompletion();
+            });
         });
 
         // 检查任务是否完成
         function checkTaskCompletion() {
-            if (circleClicks >= 10 && squareClicks >= 10) {
+            // 在任务完成时显示头衔，玩家可以自由探索
+            if (circleClicks >= 10 && squareClicks >= 10 && !taskCompleted) {
                 taskCompleted = true;
-                title.textContent = '任务完成！';
+                title.textContent = "任务完成！";
             }
         }
 
         // 定时随机移动方块和圆形
-        setInterval(setRandomPositions, 2000); // 每2秒触发一次位置更新
+        setInterval(setRandomPositionsAndColors, 2000); // 每2秒触发一次位置更新
 
-        // 初始位置
-        setRandomPositions();
+        // 初始位置和颜色
+        setRandomPositionsAndColors();
+
+        // 鼠标拖动功能
+        let isDragging = false;
+        let currentShape = null;
+        let offsetX, offsetY;
+
+        function mouseDownHandler(e) {
+            isDragging = true;
+            currentShape = e.target;
+            offsetX = e.clientX - currentShape.getBoundingClientRect().left;
+            offsetY = e.clientY - currentShape.getBoundingClientRect().top;
+            currentShape.style.transition = 'none'; // 禁止拖动时的过渡动画
+        }
+
+        function mouseMoveHandler(e) {
+            if (!isDragging || !currentShape) return;
+            const x = e.clientX - offsetX;
+            const y = e.clientY - offsetY;
+            currentShape.style.left = `${x}px`;
+            currentShape.style.top = `${y}px`;
+        }
+
+        function mouseUpHandler() {
+            isDragging = false;
+            if (currentShape) {
+                currentShape.style.transition = 'transform 0.5s ease-in-out'; // 恢复过渡动画
+            }
+        }
+
+        // 为方块和圆形添加鼠标拖动事件
+        squares.forEach(square => {
+            square.addEventListener('mousedown', mouseDownHandler);
+        });
+
+        circles.forEach(circle => {
+            circle.addEventListener('mousedown', mouseDownHandler);
+        });
+
+        // 全局添加拖动事件
+        document.addEventListener('mousemove', mouseMoveHandler);
+        document.addEventListener('mouseup', mouseUpHandler);
     </script>
 </body>
 </html>
+
