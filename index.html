@@ -1,31 +1,64 @@
 <!DOCTYPE html>
-<html lang="zh-CN">
-  <head>
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <title>LITTLE JOY</title>
-    <style>  
-      body {
-        margin:5;
-        background:coral;
-      }
+<html lang="zh">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>互动动画</title>
+    <style>
+        body {
+            margin: 0;
+            overflow: hidden;
+            background-color: #f0f0f0;
+        }
+        .shape {
+            position: absolute;
+            width: 50px;
+            height: 50px;
+            transition: transform 0.3s ease-in-out;
+        }
+        .circle {
+            background-color: #3498db;
+            border-radius: 50%;
+        }
+        .square {
+            background-color: #e74c3c;
+        }
     </style>
-  </head>
-   <div style="background:white"
-  <body>
-    <div style="
-    font-size:40px;">
-    <p>LITTLE</P>
-    </div>
-   <div style="text-align:center;
-    padding:10px;
-    font-size:60px">
-    <h1>JOYS</h1>
-    </div>
-    <div style="text-align:center;
-    padding:20px;
-    font-size:30px"
-   <p><a target="_blank" rel="noopener noreferrer" href="https://www.coolapk.com/apk/top.webcat.editor"> Get started..... </a></p>
-    
-  </body>
+</head>
+<body>
+    <div class="shape square" id="square"></div>
+    <div class="shape circle" id="circle"></div>
+
+    <script>
+        const square = document.getElementById('square');
+        const circle = document.getElementById('circle');
+
+        // 随机位置函数
+        function getRandomPosition() {
+            const x = Math.random() * window.innerWidth;
+            const y = Math.random() * window.innerHeight;
+            return { x, y };
+        }
+
+        // 设置方块和圆的位置
+        function setRandomPositions() {
+            const squarePos = getRandomPosition();
+            const circlePos = getRandomPosition();
+
+            square.style.left = `${squarePos.x}px`;
+            square.style.top = `${squarePos.y}px`;
+
+            circle.style.left = `${circlePos.x}px`;
+            circle.style.top = `${circlePos.y}px`;
+        }
+
+        // 点击事件，方块和圆会随机移动
+        document.body.addEventListener('click', () => {
+            setRandomPositions();
+        });
+
+        // 初始位置
+        setRandomPositions();
+    </script>
+</body>
 </html>
