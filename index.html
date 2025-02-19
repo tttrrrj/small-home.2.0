@@ -1,5 +1,3 @@
-
-
 <!DOCTYPE html>
 <html lang="zh">
 <head>
@@ -62,7 +60,7 @@
     <div class="shape square" id="square"></div>
     <div class="shape circle" id="circle"></div>
     <div class="task-info" id="task-info">当前任务: 点击圆形或方块</div>
-    <div class="level-info" id="level-info">Level 1</div>
+    <div class="level-info" id="level-info">Level 1 / 5</div>
     <div class="achievement" id="achievement">任务完成！</div>
     
     <script>
@@ -73,7 +71,9 @@
         const levelInfo = document.getElementById('level-info');
 
         let currentLevel = 1;
-        let taskCompleted = false;
+        let totalLevels = 5;
+        let clickCount = 0;  // 记录当前关卡的点击次数
+        let targetClickCount = 5;  // 目标点击次数（每关逐渐增加）
 
         // 随机位置函数
         function getRandomPosition() {
@@ -96,7 +96,7 @@
 
         // 检查任务是否完成
         function checkTaskCompletion() {
-            if (taskCompleted) {
+            if (clickCount >= targetClickCount) {
                 achievement.style.display = 'block';
                 setTimeout(() => {
                     achievement.style.display = 'none';
@@ -107,11 +107,17 @@
 
         // 进入下一关
         function goToNextLevel() {
-            currentLevel++;
-            levelInfo.textContent = `Level ${currentLevel}`;
-            taskCompleted = false;
-            setRandomPositions();
-            taskInfo.textContent = `当前任务: 点击圆形或方块`;
+            if (currentLevel < totalLevels) {
+                currentLevel++;
+                levelInfo.textContent = `Level ${currentLevel} / ${totalLevels}`;
+                taskInfo.textContent = `当前任务: 连续点击 ${targetClickCount} 次方块或圆形`;
+                clickCount = 0;  // 重置点击次数
+                targetClickCount++;  // 增加目标点击次数
+                setRandomPositions();  // 随机位置
+            } else {
+                taskInfo.textContent = "恭喜你完成所有关卡！";
+                levelInfo.textContent = "Game Over";
+            }
         }
 
         // 处理点击事件
@@ -125,7 +131,7 @@
                     target.style.transform = 'scale(1)';
                 }, 100);
 
-                taskCompleted = true; // 设置任务完成标志
+                clickCount++; // 每点击一次增加点击次数
                 checkTaskCompletion();
             }
         });
@@ -133,8 +139,8 @@
         // 初始化页面
         function initGame() {
             setRandomPositions();
-            taskInfo.textContent = `当前任务: 点击圆形或方块`;
-            levelInfo.textContent = `Level ${currentLevel}`;
+            taskInfo.textContent = `当前任务: 连续点击 ${targetClickCount} 次方块或圆形`;
+            levelInfo.textContent = `Level ${currentLevel} / ${totalLevels}`;
         }
 
         initGame();
