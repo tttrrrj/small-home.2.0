@@ -12,9 +12,11 @@
             font-family: Arial, sans-serif;
             display: flex;
             justify-content: center;
-            align-items: center;
-            height: 100vh;
+            align-items: flex-start;
             flex-direction: column;
+            height: 100vh;
+            width: 100%;
+            padding-top: 20px;
         }
         .shape {
             position: absolute;
@@ -31,9 +33,9 @@
         }
         #title {
             font-size: 24px;
-            margin-top: 20px;
             color: #333;
             font-weight: bold;
+            margin-bottom: 10px;
         }
         #task {
             font-size: 18px;
@@ -42,10 +44,10 @@
     </style>
 </head>
 <body>
+    <div id="title"></div>
+    <div id="task">点击任务: <span id="task-name">点击圆形10次</span></div>
     <div class="shape square" id="square"></div>
     <div class="shape circle" id="circle"></div>
-    <div id="task">点击任务: <span id="task-name">点击圆形10次</span></div>
-    <div id="title"></div>
 
     <script>
         const square = document.getElementById('square');
@@ -58,8 +60,8 @@
 
         // 随机位置函数
         function getRandomPosition() {
-            const x = Math.random() * window.innerWidth;
-            const y = Math.random() * window.innerHeight;
+            const x = Math.random() * (window.innerWidth - 50); // 保证方块和圆不会超出屏幕
+            const y = Math.random() * (window.innerHeight - 100); // 留出空间给顶部内容
             return { x, y };
         }
 
@@ -124,9 +126,11 @@
             }
         }
 
+        // 定时随机移动方块和圆形
+        setInterval(setRandomPositions, 2000); // 每2秒触发一次位置更新
+
         // 初始位置
         setRandomPositions();
     </script>
 </body>
 </html>
-
