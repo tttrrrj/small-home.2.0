@@ -36,10 +36,7 @@
             color: #333;
             font-weight: bold;
             margin-bottom: 10px;
-        }
-        #task {
-            font-size: 18px;
-            color: #555;
+            display: none; /* 隐藏头衔文字 */
         }
         .shape:hover {
             transform: scale(1.2) rotate(15deg);
@@ -49,7 +46,6 @@
 </head>
 <body>
     <div id="title"></div>
-    <div id="task">点击任务: <span id="task-name">点击圆形10次</span></div>
 
     <!-- 多个圆形和方块 -->
     <div class="shape square" id="square1"></div>
@@ -74,7 +70,6 @@
             document.getElementById('circle3'),
             document.getElementById('circle4')
         ];
-        const taskName = document.getElementById('task-name');
         const title = document.getElementById('title');
         let circleClicks = 0;
         let squareClicks = 0;
@@ -129,26 +124,26 @@
         // 更新任务
         function updateTask() {
             if (circleClicks >= 10 && squareClicks < 10) {
-                taskName.textContent = '点击方块10次';
                 title.textContent = taskTitles.circle10;
+                title.style.display = 'block';
             } else if (squareClicks >= 10 && circleClicks < 10) {
-                taskName.textContent = '点击圆形10次';
                 title.textContent = taskTitles.block10;
+                title.style.display = 'block';
             } else if (circleClicks >= 9 && squareClicks >= 1) {
-                taskName.textContent = '点击方块一次';
                 title.textContent = taskTitles.circle9_block1;
+                title.style.display = 'block';
             } else if (squareClicks >= 9 && circleClicks >= 1) {
-                taskName.textContent = '点击圆形一次';
                 title.textContent = taskTitles.block9_circle1;
+                title.style.display = 'block';
             } else if (circleClicks >= 5) {
-                taskName.textContent = '触发反弹';
                 title.textContent = taskTitles.circle5_bounce;
+                title.style.display = 'block';
             } else if (squareClicks >= 5) {
-                taskName.textContent = '触发反弹';
                 title.textContent = taskTitles.block5_bounce;
+                title.style.display = 'block';
             } else if (circleClicks >= 5 && squareClicks >= 5) {
-                taskName.textContent = '完美协调';
                 title.textContent = taskTitles.circle5_block5;
+                title.style.display = 'block';
             }
         }
 
@@ -177,6 +172,7 @@
             if (circleClicks >= 10 && squareClicks >= 10 && !taskCompleted) {
                 taskCompleted = true;
                 title.textContent = "任务完成！";
+                title.style.display = 'block';
             }
         }
 
